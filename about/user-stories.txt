@@ -1,0 +1,37 @@
+// User Stories
+
+// Once the website initializes:
+
+  // As an user, I would like to see the amount of dollars I'm starting with.
+
+  // As an user, I would like to be able to select the amount of money I want to bet.
+
+  // As an user, I would like to see a button to place the bets, so that the game gets started.
+
+// Once the game starts:
+
+  // As an user, I'd like to be able to see one card for the dealer and two cards for the player facing up.
+
+  // As an user, I'd like to see how much money I have available, and also the sum of the player's cards.
+
+  // As an user, I'd like to be able to select one of the following options:
+     hit, stand, surrender (if possible) or double-down (if possible).
+
+  // If the player hits:
+
+    // As an user, I'd like to see an extra card on the player's hand and the sum of all of
+       the player's cards.
+
+    // As an user, I'd like to be able to select one of the following options:
+       hit or stand.
+
+  // If the player stands:
+  
+    // As an user, I'd like to see the dealer's second card value and the sum of all of its cards, 
+       the sum of the player's cards as well.
+
+  // Once the round is over:
+  
+    // As an user, I'd like to see a window that says who's the winner; if the player wins, I'd like to see the amount of dollars they got from that last round.
+
+    // As an user, I'd like to see a button that says "PLAY AGAIN."
