@@ -27,13 +27,12 @@ h1 {
 #title-1 {
   font-family: 'Oooh Baby', cursive;
   position: relative;
-  right: 8vmin;
+  right: 15vmin;
 }
 
 #title-3 {
   font-size: 8vmin;
   position: relative;
-  right: 8vmin;
 } 
 
 .chips {
@@ -85,7 +84,7 @@ h1 {
 }
 
 #chip-clear:hover {
-  top: 2vmin;
+  top: 1vmin;
   background-color: black;
   color: lightgray;
 }
@@ -94,7 +93,7 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 30vmin 5vmin 25vmin;
+  margin: 0 25vmin 5vmin 25vmin;
 }
 
 p > span {
@@ -117,8 +116,27 @@ button {
 
 button:hover {
   position: relative;
-  top: 2vmin;
+  top: 1vmin;
   background-color: black;
   color: lightgray;
 }
 
+footer > p {
+  position: relative;
+  top: 2vmin;
+}
+
+footer > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*  SECOND PAGE */
+
+.second-page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  background-color: lightgray;
+}

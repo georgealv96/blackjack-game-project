@@ -15,7 +15,6 @@ const ranks = [
   'K',
   'A'
 ]
-
 // Build an 'original' deck of 'card' objects used to create shuffled decks
 const originalDeck = buildOriginalDeck()
 
@@ -29,23 +28,31 @@ let isAce
 let playersCardsSum
 let dealersCardsSum
 let isEnoughMoney
+let shuffledDeck
 
 /*----- cached element references -----*/
 const chipsEl = document.querySelector('.chips')
 const availableAmountEl = document.getElementById('available-amount')
 const betAmountEl = document.getElementById('bet-amount')
+const placeBetBtn = document.getElementById('place-bet')
+const messageEl = document.createElement('div')
+secondPageEl = document.querySelector('.second-page')
 /*----- event listeners -----*/
 chipsEl.addEventListener('click', handleChips)
-document.querySelector('button').addEventListener('click', placeBet)
+placeBetBtn.addEventListener('click', placeBet)
+
 /*----- functions -----*/
 init()
 
+// When the page initializes...
 function init() {
   availableAmount = 1000
   betAmount = 0
+  cardCount = 0
   // render function
 }
 
+// When player selects amount of dollars to bet...
 function handleChips(evt) {
   // Identify which chip was selected
   let chipSelected = evt.target.getAttribute('id')
@@ -92,28 +99,79 @@ function handleChips(evt) {
       return
   }
 
-  // Update dollar amount
+  // Update available and bet amounts
   availableAmountEl.innerHTML = `AVAILABLE: <br><span> $</span>${availableAmount}`
   betAmountEl.innerHTML = `BET: <br><span> $</span>${betAmount}`
-  // document.getElementById('#bet-amount').innerText = betAmount
 }
 
-function placeBet(evt) {}
+// When player is ready to place their bets and start the game...
+function placeBet(evt) {
+  // If the player placed a bet, start the game when they click the "Place Bet" button
+  if (betAmount > 0) {
+    renderGame()
+  } else {
+    evt.preventDefault()
+    popUpMsg(`Don't be cheap. Make a bet!`)
+    return
+  }
+}
 
-/////////////////////////////
+// When the game needs to pop up a message...
+function popUpMsg(message) {
+  messageEl.innerText = message
+  // Insert the message element in the <div> inside of <footer>
+  document.querySelector('footer > div').prepend(messageEl)
+  // Style the message banner
+  messageEl.style.color = 'black'
+  messageEl.style.paddingBottom = '1vmin'
+  messageEl.style.fontSize = '2.5vmin'
+  // Make the message disappear after 2 seconds
+  setTimeout(function () {
+    messageEl.style.color = 'transparent'
+  }, 2000)
+}
+
+// When the game starts and is displayed in the screen...
+function renderGame() {
+  // This makes the second page display
+  secondPageEl.style.position = 'absolute'
+  secondPageEl.style.zIndex = '1'
+  // Reset the shuffled deck
+  shuffledDeck = []
+  // It's going to check if the deck needs to be shuffled below
+  shuffledDeck = getNewShuffledDeck()
+  ///////////
+  // const shuffledCardContainer = document.createElement('section')
+  // secondPageEl.append(shuffledCardContainer)
+  // renderDeckInContainer(shuffledDeck, shuffledCardContainer)
+  //////////
+  renderTable()
+  console.log(originalDeck)
+  console.log(shuffledDeck)
+}
+
+// When the table is being displayed...
+function renderTable() {
+  console.log(secondPageEl)
+}
+
+// When a shuffled deck is needed... (#)
 function getNewShuffledDeck() {
   // Create a copy of the originalDeck (leave originalDeck untouched!)
   const tempDeck = [...originalDeck]
-  const newShuffledDeck = []
-  while (tempDeck.length) {
-    // Get a random index for a card still in the tempDeck
-    const rndIdx = Math.floor(Math.random() * tempDeck.length)
-    // Note the [0] after splice - this is because splice always returns an array and we just want the card object in that array
-    newShuffledDeck.push(tempDeck.splice(rndIdx, 1)[0])
+  // If there is less than 8 cards in the deck then shuffle from the original deck
+  if (shuffledDeck < 8) {
+    while (tempDeck.length) {
+      // Get a random index for a card still in the tempDeck
+      const rndIdx = Math.floor(Math.random() * tempDeck.length)
+      // Note the [0] after splice - this is because splice always returns an array and we just want the card object in that array
+      shuffledDeck.push(tempDeck.splice(rndIdx, 1)[0])
+    }
   }
-  return newShuffledDeck
+  return shuffledDeck
 }
 
+// Build a deck of cards... (#)
 function buildOriginalDeck() {
   const deck = []
   // Use nested forEach to generate card objects
@@ -129,6 +187,10 @@ function buildOriginalDeck() {
   })
   return deck
 }
+/////////////////////////////
+/////////////////////////////
+/////////////////////////////
+
 // function renderNewShuffledDeck() {
 //   // Create a copy of the originalDeck (leave originalDeck untouched!)
 //   shuffledDeck = getNewShuffledDeck()
@@ -148,3 +210,5 @@ function buildOriginalDeck() {
 //   // }, '');
 //   container.innerHTML = cardsHtml
 // }
+
+// Reference (#): https://git.generalassemb.ly/SEI-CC/SEI-6-5/blob/main/Unit_1/08-libraries-frameworks/8.2-css-card-library.md
