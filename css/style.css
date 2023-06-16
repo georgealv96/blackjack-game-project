@@ -1,0 +1,96 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  background-color: lightgray;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+main {
+  margin-top: 8vmin;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 10vmin;
+  margin: 0;
+}
+
+#title-1 {
+  font-family: 'Oooh Baby', cursive;
+  position: relative;
+  right: 8vmin;
+}
+
+#title-3 {
+  font-size: 8vmin;
+  position: relative;
+  right: 8vmin;
+} 
+
+.chips {
+  margin: 15vmin 0 8vmin;
+  display: flex;
+  justify-content: center;
+}
+
+.chips > div {
+  margin: 0 1vmin;
+  height: 10vmin;
+  width: 10vmin;
+  border: solid black 1vmin;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 8vmin;
+}
+
+#chip-1 {
+  border-color: red;
+}
+
+#chip-2 {
+  border-color: green;
+}
+
+#chip-3 {
+  border-color: blue;
+}
+
+#chip-4 {
+  border-color: yellow;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 30vmin 5vmin 25vmin;
+}
+
+p > span {
+  /* font-family: 'Caveat', cursive; */
+  font-size: 3vmin;
+}
+
+footer > p {
+  font-size: 4vmin;
+}
+
+button {
+  font-size: 4vmin;
+  padding: 2vmin;
+  border-radius: 2vmin;
+  border: solid;
+  background-color: black;
+  color: lightgray;
+  box-shadow: 5px 5px 5px gray;
+}
+
