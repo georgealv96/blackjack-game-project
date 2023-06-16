@@ -1,0 +1,142 @@
+> Initialize the game
+
+> Display the amount of dollars available and a selector for the player to pick their bets
+
+> Wait for player to pick a dollar amount from the selector
+
+> If the dollar amount picked is less than what the player has available then
+
+    > Assign that number to a variable
+
+    > Substract that number from the player's available amount
+
+    > Display the table
+
+    > Select and display two cards for the dealer and two cards for the player, hinding the dealer's second card
+
+    > If the dealer's first card is NOT an Ace OR the player's available money minus half of their bet
+      is less than zero (available amount - (bet * 0.5) < 0) then
+
+        > If the sum of the player's cards equals 21 then 
+
+           > Do the following operation --> bet = (bet * 2) + (bet / 2)
+
+           > Display a winning and a "BLACKJACK!" message and the amount of dollars won
+
+           > Display a 'play again' button
+
+        > Else, if the sum of the player's cards equals 9, 10 or 11 then
+
+            > Display the following buttons: 'hit', 'stand' & 'double-down.'
+
+        > Otherwise
+
+            > Show the following buttons: 'hit' & 'stand.'
+
+            > When player clicks on 'hit'
+
+                > Add an extra card and add its value to the sum of all the player's card
+
+                > If the value is less than 21 then
+
+                    > Show the 'hit' and 'stand' buttons and wait for player's selection
+
+                > Else, if the value is 21 then
+
+                    > Multiply the player's bet amount by two (double it) and add it to their available amount of dollars 
+            
+                    > Display a winning message and the amount of dollars won
+
+                    > Display a 'play again' button
+
+                > Otherwise
+
+                    > Display a losing message and the amount of dollars lost
+
+                    > Display a 'play again' button
+        
+            > When the player clicks on 'double-down'
+
+                > Multiply the bet by two (double it)
+
+                > Add an extra card and add its value to the sum of all the player's card
+
+                > Show dealer's hidden card and add extra cards to its hand if needed
+
+                > Determine who wins or loses (instructions provided below)
+
+            > When the player clicks on 'stand' OR any of the conditions above has ended
+
+                > Show dealer's hidden card
+
+                > While the sum of all of the dealer's cards is less or equal than 17 do the following
+
+                    > Add an extra card and add its value to the sum of all of the dealer's cards
+
+                > If the sum of the player's cards is greater than the sum of the dealer's card AND 
+                  the sum of the player's card is less or equal than 21 then
+
+                    > Multiply the player's bet amount by two (double it) and add it to their available amount of dollars 
+            
+                    > Display a winning message and the amount of dollars won
+
+                    > Display a 'play again' button 
+
+                > Else, if the sum of the player's cards is equal to the sum of the dealer's cards then
+
+                    > Add the bet amount to the player's available amount of dollars
+
+                    > Display a message saying that it's a push (a tie)
+
+                    > Display a 'play again' button
+
+                > Otherwise 
+
+                    > Display a losing message
+
+                    > Display a 'play again' button
+
+                > When player clicks on 'play again'
+
+                    > Initialize the game
+
+    > Otherwise (if the dealer's first card (the card face up) is an Ace card then)
+
+        > Display an extra button called 'insurance'
+
+        > Create a variable to store the dollar amount for the insurance
+
+        > When the player clicks on 'insurance'
+
+            > Substract half of the player's bet from their available dollars amount
+
+            > Add half of the player's bet to the insurance variable
+
+            > If the sum of the dealer's cards added together is greater than 21 OR 
+              the sum of the dealer's cards is less than the player's cards added together then
+
+                > Multiply the player's bet amount by two (double it) and add it to their available amount of dollars
+
+                > Display a winning message and the amount of dollars won
+
+            > Else, if the sum of all of the player's cards is less than the dealer's cards added together then
+
+                > Multiply the insurance variable by two and add it to the available amount
+
+                > Display a losing message and the amount of dollars won from the insurance
+
+            > Otherwise
+
+                > Add the bet amount to the player's available amount of dollars
+
+                > Display a message saying that it's a push (a tie)
+
+> Otherwise (if the dollar amount picked is less than what the player has available then)
+
+    > Show a message saying "Insufficient funds. Reload the page to play again."
+
+
+
+
+
+
