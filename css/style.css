@@ -51,6 +51,12 @@ h1 {
   text-align: center;
   line-height: 8vmin;
   font-size: 2.5vmin;
+  cursor: pointer;
+}
+
+.chips > div:hover {
+  position: relative;
+  bottom: 2vmin;
 }
 
 #chip-1 {
@@ -67,6 +73,21 @@ h1 {
 
 #chip-4 {
   border-color: yellow;
+}
+
+#chip-clear {
+  padding-top: 1vmin;
+  border-radius: 2vmin;
+  border: solid 0.3vmin;
+  background-color: lightgray;
+  color: black;
+  box-shadow: 5px 5px 5px gray;
+}
+
+#chip-clear:hover {
+  top: 2vmin;
+  background-color: black;
+  color: lightgray;
 }
 
 footer {
@@ -88,9 +109,16 @@ button {
   font-size: 4vmin;
   padding: 2vmin;
   border-radius: 2vmin;
-  border: solid;
+  border: solid 0.5vmin;
+  background-color: lightgray;
+  color: black;
+  box-shadow: 5px 5px 5px gray;
+}
+
+button:hover {
+  position: relative;
+  top: 2vmin;
   background-color: black;
   color: lightgray;
-  box-shadow: 5px 5px 5px gray;
 }
 

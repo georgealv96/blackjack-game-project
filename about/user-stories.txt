@@ -1,4 +1,4 @@
-// User Stories
+// User Stories:
 
 // Once the website initializes:
 
@@ -38,4 +38,6 @@
 
   // As an user, I'd like to see a button that says "PLAY AGAIN," so the player can start a new round.
 
+// Bonus:
 
+  // As an user, I'd like to hear sounds when the player click on the buttons
