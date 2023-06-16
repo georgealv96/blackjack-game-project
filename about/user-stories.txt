@@ -6,7 +6,7 @@
 
   // As an user, I would like to be able to select the amount of money I want to bet.
 
-  // As an user, I would like to see a button to place the bets, so that the game gets started.
+  // As an user, I would like to see a button to place the bets, so that the game gets started when clicked.
 
 // Once the game starts:
 
@@ -15,14 +15,14 @@
   // As an user, I'd like to see how much money I have available, and also the sum of the player's cards.
 
   // As an user, I'd like to be able to select one of the following options:
-     hit, stand, surrender (if possible) or double-down (if possible).
+     hit, stand, insurance (if possible) or double-down (if possible).
 
   // If the player hits:
 
     // As an user, I'd like to see an extra card on the player's hand and the sum of all of
        the player's cards.
 
-    // As an user, I'd like to be able to select one of the following options:
+    // As an user, if the user's cards don't add up to 21, I'd like to be able to select one of the following options again:
        hit or stand.
 
   // If the player stands:
@@ -34,4 +34,8 @@
   
     // As an user, I'd like to see a window that says who's the winner; if the player wins, I'd like to see the amount of dollars they got from that last round.
 
-    // As an user, I'd like to see a button that says "PLAY AGAIN."
+  // As an user, I'd like to see the remaining amount of dollars that they have left to play.
+
+  // As an user, I'd like to see a button that says "PLAY AGAIN," so the player can start a new round.
+
+

@@ -4,11 +4,17 @@
 
 > Wait for player to pick a dollar amount from the selector
 
+> Initialize a variable to count how many cards are left in the deck 
+
 > If the dollar amount picked is less than what the player has available then
 
     > Assign that number to a variable
 
     > Substract that number from the player's available amount
+
+    > If card count is less than 8
+
+        > Shuffle cards
 
     > Display the table
 
