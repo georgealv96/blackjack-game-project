@@ -27,8 +27,12 @@ h1 {
 #title-1 {
   font-family: 'Oooh Baby', cursive;
   position: relative;
-  right: 14vmin;
+  right: 12vmin;
   font-size: 7vmin;
+}
+
+#title-1 > span {
+  font-size: 4vmin;
 }
 
 #title-3 {
@@ -54,7 +58,7 @@ h1 {
   cursor: pointer;
 }
 
-.chips > div:hover {
+.chips > div:hover, #player-side > div:hover, #dealer-side > div:hover {
   position: relative;
   bottom: 2vmin;
 }
@@ -134,35 +138,46 @@ footer > div {
 
 /*  SECOND PAGE */
 
-.second-page {
+#second-page {
   height: 100vh;
   width: 100vw;
   display: none;
   background-color: lightgray;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: -1;
-  grid-template-rows: 9vmin 1fr 10vmin 1fr 15vmin;
+  grid-template-rows: 11vmin 1fr 10vmin 1fr 15vmin;
+  grid-template-columns: minmax(0, 1fr);
 }
 
-.second-page h1 {
+#second-page-title, #dealer-side, #player-side, #second-page-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* this wraps the cards */
+}
+#second-page-title {
+  padding: 2vmin 0;
+}
+
+#second-page-title span {
+  font-size: 3vmin;
+}
+
+#second-page-title-1 {
+  font-size: 5vmin;
+  font-family: 'Oooh Baby', cursive;
+  position: relative;
+}
+
+#second-page-title-2 {
   font-size: 7vmin;
   text-align: center;
 }
 
-#second-page-title span {
-  font-size: 5vmin;
-  font-family: 'Oooh Baby', cursive;
-}
-
-#second-page-buttons, #bet-info {
-  /* border: solid black 2px; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 #second-page-buttons > button {
-  width: 30vmin;
+  width: 23vmin;
   height: 6vmin;
   margin: 0 5vmin 2vmin;
   font-size: 3vmin;
@@ -174,7 +189,8 @@ footer > div {
 }
 
 #bet-info {
-  justify-content: space-around;
+  display: flex;
+  justify-content: space-evenly;
   font-size: 3vmin;
 }
 
@@ -202,7 +218,9 @@ footer > div {
 }
 
 #player-side > div, #dealer-side > div {
-  height: 20vmin;
-  width: 15vmin;
-  margin: 0 1vmin;
+  min-height: 20vmin;
+  min-width: 15vmin;
+  margin: 0 1.5vmin;
+  box-shadow: 5px 5px 5px gray;
+  border: solid black 2px;
 }

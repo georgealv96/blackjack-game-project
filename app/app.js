@@ -17,7 +17,6 @@ const ranks = [
 ]
 // Build an 'original' deck of 'card' objects used to create shuffled decks
 const originalDeck = buildOriginalDeck()
-
 /*----- app's state (variables) -----*/
 
 let availableAmount
@@ -38,7 +37,7 @@ const availableAmountEl = document.getElementById('available-amount')
 const betAmountEl = document.getElementById('bet-amount')
 const placeBetBtn = document.getElementById('place-bet')
 const messageEl = document.createElement('div')
-const secondPageEl = document.querySelector('.second-page')
+const secondPageEl = document.getElementById('second-page')
 const playerSideEl = document.getElementById('player-side')
 const dealerSideEl = document.getElementById('dealer-side')
 /*----- event listeners -----*/
@@ -137,7 +136,6 @@ function popUpMsg(message) {
 // When the game starts and is displayed in the screen...
 function renderGame() {
   // This makes the second page display
-  secondPageEl.style.position = 'absolute'
   secondPageEl.style.zIndex = '1'
   secondPageEl.style.display = 'grid'
   // Reset the shuffled deck
@@ -150,24 +148,44 @@ function renderGame() {
   // renderDeckInContainer(shuffledDeck, shuffledCardContainer)
   //////////
   renderCards()
-  console.log(shuffledDeck)
 }
 
 // When the table is being displayed...
 function renderCards() {
   dealersCards = []
   playersCards = []
-
   for (let i = 0; i < 4; i++) {
     if (i % 2 === 0) {
       playersCards.push(shuffledDeck.shift())
     } else {
-      dealersCards.push(shuffledDeck.shift())
+      dealersCards.unshift(shuffledDeck.shift())
     }
   }
+  console.log(shuffledDeck)
+  console.log(playersCards)
+  console.log(dealersCards)
+  renderDeckInContainer(playersCards, playerSideEl, 0)
+  renderDeckInContainer(dealersCards, dealerSideEl, 1)
+  // CONTINUE HERE (last edited: 06/16 9pm)
+}
 
-  renderDeckInContainer(playersCards, playerSideEl)
-  renderDeckInContainer(dealersCards, dealerSideEl)
+function renderDeckInContainer(deck, container, faceDown) {
+  container.innerHTML = ''
+  // Let's build the cards as a string of HTML
+  let cardsHtml = ''
+  deck.forEach(function (card, idx) {
+    // If this is the dealer's second card then face it down
+    if (idx === 0 && faceDown) {
+      cardsHtml += `<div class="card ${card.face} ${card.back}"></div>`
+    } else {
+      cardsHtml += `<div class="card ${card.face}"></div>`
+    }
+  })
+  // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
+  // const cardsHtml = deck.reduce(function(html, card) {
+  //   return html + `<div class="card ${card.face}"></div>`;
+  // }, '');
+  container.innerHTML = cardsHtml
 }
 
 // When a shuffled deck is needed... (#)
@@ -196,7 +214,9 @@ function buildOriginalDeck() {
         // The 'face' property maps to the library's CSS classes for cards
         face: `${suit}${rank}`,
         // Setting the 'value' property for game of blackjack, not war
-        value: Number(rank) || (rank === 'A' ? 11 : 10)
+        value: Number(rank) || (rank === 'A' ? 11 : 10),
+        // The 'back' property maps to the library's CSS classes for cards
+        back: `back-red`
       })
     })
   })
@@ -211,19 +231,5 @@ function buildOriginalDeck() {
 //   shuffledDeck = getNewShuffledDeck()
 //   renderDeckInContainer(shuffledDeck, shuffledContainer)
 // }
-
-function renderDeckInContainer(deck, container) {
-  container.innerHTML = ''
-  // Let's build the cards as a string of HTML
-  let cardsHtml = ''
-  deck.forEach(function (card) {
-    cardsHtml += `<div class="card ${card.face}"></div>`
-  })
-  // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
-  // const cardsHtml = deck.reduce(function(html, card) {
-  //   return html + `<div class="card ${card.face}"></div>`;
-  // }, '');
-  container.innerHTML = cardsHtml
-}
 
 // Reference (#): https://git.generalassemb.ly/SEI-CC/SEI-6-5/blob/main/Unit_1/08-libraries-frameworks/8.2-css-card-library.md
