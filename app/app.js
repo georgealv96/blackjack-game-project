@@ -29,6 +29,8 @@ let playersCardsSum
 let dealersCardsSum
 let isEnoughMoney
 let shuffledDeck
+let playersCards
+let dealersCards
 
 /*----- cached element references -----*/
 const chipsEl = document.querySelector('.chips')
@@ -36,7 +38,9 @@ const availableAmountEl = document.getElementById('available-amount')
 const betAmountEl = document.getElementById('bet-amount')
 const placeBetBtn = document.getElementById('place-bet')
 const messageEl = document.createElement('div')
-secondPageEl = document.querySelector('.second-page')
+const secondPageEl = document.querySelector('.second-page')
+const playerSideEl = document.getElementById('player-side')
+const dealerSideEl = document.getElementById('dealer-side')
 /*----- event listeners -----*/
 chipsEl.addEventListener('click', handleChips)
 placeBetBtn.addEventListener('click', placeBet)
@@ -95,7 +99,6 @@ function handleChips(evt) {
       betAmount = 0
       break
     default:
-      console.log('hola')
       return
   }
 
@@ -136,6 +139,7 @@ function renderGame() {
   // This makes the second page display
   secondPageEl.style.position = 'absolute'
   secondPageEl.style.zIndex = '1'
+  secondPageEl.style.display = 'grid'
   // Reset the shuffled deck
   shuffledDeck = []
   // It's going to check if the deck needs to be shuffled below
@@ -145,14 +149,25 @@ function renderGame() {
   // secondPageEl.append(shuffledCardContainer)
   // renderDeckInContainer(shuffledDeck, shuffledCardContainer)
   //////////
-  renderTable()
-  console.log(originalDeck)
+  renderCards()
   console.log(shuffledDeck)
 }
 
 // When the table is being displayed...
-function renderTable() {
-  console.log(secondPageEl)
+function renderCards() {
+  dealersCards = []
+  playersCards = []
+
+  for (let i = 0; i < 4; i++) {
+    if (i % 2 === 0) {
+      playersCards.push(shuffledDeck.shift())
+    } else {
+      dealersCards.push(shuffledDeck.shift())
+    }
+  }
+
+  renderDeckInContainer(playersCards, playerSideEl)
+  renderDeckInContainer(dealersCards, dealerSideEl)
 }
 
 // When a shuffled deck is needed... (#)
@@ -197,18 +212,18 @@ function buildOriginalDeck() {
 //   renderDeckInContainer(shuffledDeck, shuffledContainer)
 // }
 
-// function renderDeckInContainer(deck, container) {
-//   container.innerHTML = ''
-//   // Let's build the cards as a string of HTML
-//   let cardsHtml = ''
-//   deck.forEach(function (card) {
-//     cardsHtml += `<div class="card ${card.face}"></div>`
-//   })
-//   // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
-//   // const cardsHtml = deck.reduce(function(html, card) {
-//   //   return html + `<div class="card ${card.face}"></div>`;
-//   // }, '');
-//   container.innerHTML = cardsHtml
-// }
+function renderDeckInContainer(deck, container) {
+  container.innerHTML = ''
+  // Let's build the cards as a string of HTML
+  let cardsHtml = ''
+  deck.forEach(function (card) {
+    cardsHtml += `<div class="card ${card.face}"></div>`
+  })
+  // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
+  // const cardsHtml = deck.reduce(function(html, card) {
+  //   return html + `<div class="card ${card.face}"></div>`;
+  // }, '');
+  container.innerHTML = cardsHtml
+}
 
 // Reference (#): https://git.generalassemb.ly/SEI-CC/SEI-6-5/blob/main/Unit_1/08-libraries-frameworks/8.2-css-card-library.md

@@ -27,7 +27,8 @@ h1 {
 #title-1 {
   font-family: 'Oooh Baby', cursive;
   position: relative;
-  right: 15vmin;
+  right: 14vmin;
+  font-size: 7vmin;
 }
 
 #title-3 {
@@ -84,9 +85,9 @@ h1 {
 }
 
 #chip-clear:hover {
-  top: 1vmin;
   background-color: black;
   color: lightgray;
+  bottom: 0;
 }
 
 footer {
@@ -104,7 +105,7 @@ footer > p {
   font-size: 4vmin;
 }
 
-button {
+#place-bet {
   font-size: 4vmin;
   padding: 2vmin;
   border-radius: 2vmin;
@@ -114,9 +115,8 @@ button {
   box-shadow: 5px 5px 5px gray;
 }
 
-button:hover {
+#place-bet:hover, #second-page-buttons > button:hover {
   position: relative;
-  top: 1vmin;
   background-color: black;
   color: lightgray;
 }
@@ -137,6 +137,72 @@ footer > div {
 .second-page {
   height: 100vh;
   width: 100vw;
-  display: flex;
+  display: none;
   background-color: lightgray;
+  position: relative;
+  z-index: -1;
+  grid-template-rows: 9vmin 1fr 10vmin 1fr 15vmin;
+}
+
+.second-page h1 {
+  font-size: 7vmin;
+  text-align: center;
+}
+
+#second-page-title span {
+  font-size: 5vmin;
+  font-family: 'Oooh Baby', cursive;
+}
+
+#second-page-buttons, #bet-info {
+  /* border: solid black 2px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#second-page-buttons > button {
+  width: 30vmin;
+  height: 6vmin;
+  margin: 0 5vmin 2vmin;
+  font-size: 3vmin;
+  border-radius: 2vmin;
+  border: solid 0.5vmin;
+  background-color: lightgray;
+  color: black;
+  box-shadow: 5px 5px 5px gray;
+}
+
+#bet-info {
+  justify-content: space-around;
+  font-size: 3vmin;
+}
+
+#arrow-1 {
+  color: red;
+  font-size: ;
+}
+
+#arrow-2 {
+  color: green;
+}
+
+#arrow-3 {
+  color: blue;
+}
+
+#arrow-4 {
+  color: yellow;
+}
+
+#player-side, #dealer-side {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#player-side > div, #dealer-side > div {
+  height: 20vmin;
+  width: 15vmin;
+  margin: 0 1vmin;
 }
