@@ -32,6 +32,7 @@ let playersCards
 let dealersCards
 
 /*----- cached element references -----*/
+
 const chipsEl = document.querySelector('.chips')
 const availableAmountEl = document.getElementById('available-amount')
 const betAmountEl = document.getElementById('bet-amount')
@@ -40,9 +41,16 @@ const messageEl = document.createElement('div')
 const secondPageEl = document.getElementById('second-page')
 const playerSideEl = document.getElementById('player-side')
 const dealerSideEl = document.getElementById('dealer-side')
+const hitBtnEl = document.getElementById('hit-btn')
+const standBtnEl = document.getElementById('stand-btn')
+const dealerHasEl = document.getElementById('dealer-bet-info')
+const playerHasEl = document.getElementById('player-bet-info')
 /*----- event listeners -----*/
+
 chipsEl.addEventListener('click', handleChips)
 placeBetBtn.addEventListener('click', placeBet)
+hitBtnEl.addEventListener('click', handleHitBtn)
+standBtnEl.addEventListener('click', handleStandBtn)
 
 /*----- functions -----*/
 init()
@@ -156,25 +164,27 @@ function renderTable() {
       dealersCards.unshift(shuffledDeck.shift())
     }
   }
+
   // Sum the player's first two cards, and the dealer's first two cards
   for (let i = 0; i < 2; i++) {
     playersCardsSum += playersCards[i].value
     dealersCardsSum += dealersCards[i].value
   }
+  // If the sum of the player's cards or the sum of the dealer's equal 22 then substract 10
+  playersCardsSum = checkForSumOf22(playersCardsSum)
+  dealersCardsSum = checkForSumOf22(dealersCardsSum)
 
   renderDeckInContainer(playersCards, playerSideEl, 0)
   renderDeckInContainer(dealersCards, dealerSideEl, 1)
-  console.log(playersCards)
-  console.log(dealersCards)
-  console.log(dealersCardsSum)
+  ///////////////////////////////
+  console.log(playersCards) //
+  console.log(dealersCards) //
+  console.log(dealersCardsSum) //
+  ///////////////////////////////
   // Update bet-info
-  document.getElementById(
-    'player-bet-info'
-  ).innerHTML = `<span id="arrow-2">></span> PLAYER has ${playersCardsSum}`
-  document.getElementById(
-    'dealer-bet-info'
-  ).innerHTML = `<span id="arrow-3">></span> DEALER has ${
-    dealersCardsSum - dealersCards[1].value
+  playerHasEl.innerHTML = `<span id="arrow-2">></span> PLAYER has ${playersCardsSum}`
+  dealerHasEl.innerHTML = `<span id="arrow-3">></span> DEALER has ${
+    dealersCardsSum - dealersCards[0].value
   }`
   document.getElementById(
     'your-bet-info'
@@ -182,6 +192,15 @@ function renderTable() {
   document.getElementById(
     'available-bet-info'
   ).innerHTML = `<span id="arrow-4">></span> AVAILABLE: $${availableAmount}`
+}
+
+// Check for a sum of 22 (two Aces)
+function checkForSumOf22(sum) {
+  if (sum === 22) {
+    return sum - 10
+  } else {
+    return sum
+  }
 }
 
 // Search for an Ace in a playing hand
@@ -193,10 +212,40 @@ function searchForAce(cardHand) {
   return quantity
 }
 
-// function sumCards(playerValue, dealerValue) {
-//   playersCardsSum += playerValue
-//   dealersCardsSum += dealerValue
-// }
+// When player hits...
+function handleHitBtn(evt) {
+  // Let the player keep clicking on the "Hit" button while the sum of their cards is less than 22
+  if (playersCardsSum < 22) {
+    playersCards.push(shuffledDeck.shift())
+    playersCardsSum += playersCards[playersCards.length - 1].value
+    playerSideEl.innerHTML += `<div class="card ${
+      playersCards[playersCards.length - 1].face
+    }"></div>`
+    playerHasEl.innerHTML = `<span id="arrow-2">></span> PLAYER has ${playersCardsSum}`
+  } else {
+    evt.preventDefault()
+    // ---> SHOW MESSAGE (PLAYER BUSTED)
+  }
+}
+
+// When player stands...
+function handleStandBtn(evt) {
+  dealerSideEl.innerHTML = ''
+  dealersCards.forEach(function (card) {
+    dealerSideEl.innerHTML += `<div class="card ${card.face}"></div>`
+  })
+  dealerHasEl.innerHTML = `<span id="arrow-2">></span> DEALER has ${dealersCardsSum}`
+  while (dealersCardsSum < 17) {
+    dealersCards.unshift(shuffledDeck.shift())
+    dealerSideEl.innerHTML += `<div class="card ${dealersCards[0].face}"></div>`
+    dealersCardsSum += dealersCards[0].value
+    dealerHasEl.innerHTML = `<span id="arrow-2">></span> DEALER has ${dealersCardsSum}`
+    console.log(dealersCardsSum)
+    console.log(dealersCards)
+  }
+  standBtnEl.disabled = true
+  hitBtnEl.disabled = true
+} // CHECK THIS FUNCTION FOR ERRORS
 
 function renderDeckInContainer(deck, container, faceDown) {
   container.innerHTML = ''
@@ -204,8 +253,8 @@ function renderDeckInContainer(deck, container, faceDown) {
   let cardsHtml = ''
   deck.forEach(function (card, idx) {
     // If this is the dealer's second card then face it down
-    if (idx === 1 && faceDown) {
-      cardsHtml += `<div class="card ${card.face} ${card.back}"></div>`
+    if (idx === 0 && faceDown) {
+      cardsHtml += `<div class="card ${card.face} ${card.back} face-down"></div>`
     } else {
       cardsHtml += `<div class="card ${card.face}"></div>`
     }
