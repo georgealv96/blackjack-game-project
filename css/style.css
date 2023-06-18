@@ -142,7 +142,7 @@ footer > div {
   height: 100vh;
   width: 100vw;
   display: none;
-  background-color: lightgray;
+  background-color: rgb(1, 199, 1);
   position: absolute;
   top: 0;
   left: 0;
@@ -182,10 +182,10 @@ footer > div {
   margin: 0 5vmin 2vmin;
   font-size: 3vmin;
   border-radius: 2vmin;
-  border: solid 0.5vmin;
+  border: solid 2px;
   background-color: lightgray;
   color: black;
-  box-shadow: 5px 5px 5px gray;
+  box-shadow: 5px 5px 5px darkgreen;
 }
 
 #bet-info {
@@ -194,9 +194,15 @@ footer > div {
   font-size: 3vmin;
 }
 
+#player-bet-info, #dealer-bet-info {
+  background-color: lightgray;
+  padding: 0 1vmin;
+  border: black solid 1px;
+  border-radius: 1vmin;
+}
+
 #arrow-1 {
   color: red;
-  font-size: ;
 }
 
 #arrow-2 {
@@ -221,6 +227,6 @@ footer > div {
   min-height: 20vmin;
   min-width: 15vmin;
   margin: 0 1.5vmin;
-  box-shadow: 5px 5px 5px gray;
-  border: solid black 2px;
+  box-shadow: 5px 5px 5px darkgreen;
+  border: solid black 1.5px;
 }

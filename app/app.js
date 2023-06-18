@@ -23,9 +23,9 @@ let availableAmount
 let betAmount
 let cardCount
 let insuranceAmount
-let isAce
-let playersCardsSum
-let dealersCardsSum
+let aceCount
+let playersCardsSum = 0
+let dealersCardsSum = 0
 let isEnoughMoney
 let shuffledDeck
 let playersCards
@@ -52,7 +52,6 @@ function init() {
   availableAmount = 1000
   betAmount = 0
   cardCount = 0
-  // render function
 }
 
 // When player selects amount of dollars to bet...
@@ -113,13 +112,13 @@ function placeBet(evt) {
     renderGame()
   } else {
     evt.preventDefault()
-    popUpMsg(`Don't be cheap. Make a bet!`)
+    makeYourBetMsg(`Don't be cheap. Make a bet!`)
     return
   }
 }
 
 // When the game needs to pop up a message...
-function popUpMsg(message) {
+function makeYourBetMsg(message) {
   messageEl.innerText = message
   // Insert the message element in the <div> inside of <footer>
   document.querySelector('footer > div').prepend(messageEl)
@@ -142,16 +141,12 @@ function renderGame() {
   shuffledDeck = []
   // It's going to check if the deck needs to be shuffled below
   shuffledDeck = getNewShuffledDeck()
-  ///////////
-  // const shuffledCardContainer = document.createElement('section')
-  // secondPageEl.append(shuffledCardContainer)
-  // renderDeckInContainer(shuffledDeck, shuffledCardContainer)
-  //////////
-  renderCards()
+  // Show cards on the table with the sum of their values and bet information
+  renderTable()
 }
 
 // When the table is being displayed...
-function renderCards() {
+function renderTable() {
   dealersCards = []
   playersCards = []
   for (let i = 0; i < 4; i++) {
@@ -161,13 +156,47 @@ function renderCards() {
       dealersCards.unshift(shuffledDeck.shift())
     }
   }
-  console.log(shuffledDeck)
-  console.log(playersCards)
-  console.log(dealersCards)
+  // Sum the player's first two cards, and the dealer's first two cards
+  for (let i = 0; i < 2; i++) {
+    playersCardsSum += playersCards[i].value
+    dealersCardsSum += dealersCards[i].value
+  }
+
   renderDeckInContainer(playersCards, playerSideEl, 0)
   renderDeckInContainer(dealersCards, dealerSideEl, 1)
-  // CONTINUE HERE (last edited: 06/16 9pm)
+  console.log(playersCards)
+  console.log(dealersCards)
+  console.log(dealersCardsSum)
+  // Update bet-info
+  document.getElementById(
+    'player-bet-info'
+  ).innerHTML = `<span id="arrow-2">></span> PLAYER has ${playersCardsSum}`
+  document.getElementById(
+    'dealer-bet-info'
+  ).innerHTML = `<span id="arrow-3">></span> DEALER has ${
+    dealersCardsSum - dealersCards[1].value
+  }`
+  document.getElementById(
+    'your-bet-info'
+  ).innerHTML = `<span id="arrow-1">></span> YOUR BET: $${betAmount}`
+  document.getElementById(
+    'available-bet-info'
+  ).innerHTML = `<span id="arrow-4">></span> AVAILABLE: $${availableAmount}`
 }
+
+// Search for an Ace in a playing hand
+function searchForAce(cardHand) {
+  let quantity = 0
+  cardHand.forEach(function (card) {
+    if (card.isAce) quantity += card.isAce
+  })
+  return quantity
+}
+
+// function sumCards(playerValue, dealerValue) {
+//   playersCardsSum += playerValue
+//   dealersCardsSum += dealerValue
+// }
 
 function renderDeckInContainer(deck, container, faceDown) {
   container.innerHTML = ''
@@ -175,7 +204,7 @@ function renderDeckInContainer(deck, container, faceDown) {
   let cardsHtml = ''
   deck.forEach(function (card, idx) {
     // If this is the dealer's second card then face it down
-    if (idx === 0 && faceDown) {
+    if (idx === 1 && faceDown) {
       cardsHtml += `<div class="card ${card.face} ${card.back}"></div>`
     } else {
       cardsHtml += `<div class="card ${card.face}"></div>`
@@ -186,6 +215,11 @@ function renderDeckInContainer(deck, container, faceDown) {
   //   return html + `<div class="card ${card.face}"></div>`;
   // }, '');
   container.innerHTML = cardsHtml
+}
+
+// does not have a functionality for now
+function sumCards(sum, value) {
+  return (sum += value)
 }
 
 // When a shuffled deck is needed... (#)
@@ -216,20 +250,13 @@ function buildOriginalDeck() {
         // Setting the 'value' property for game of blackjack, not war
         value: Number(rank) || (rank === 'A' ? 11 : 10),
         // The 'back' property maps to the library's CSS classes for cards
-        back: `back-red`
+        back: `back-red`,
+        // Store if card is an Ace (1) or not (0)
+        isAce: rank === 'A' ? 1 : 0
       })
     })
   })
   return deck
 }
-/////////////////////////////
-/////////////////////////////
-/////////////////////////////
-
-// function renderNewShuffledDeck() {
-//   // Create a copy of the originalDeck (leave originalDeck untouched!)
-//   shuffledDeck = getNewShuffledDeck()
-//   renderDeckInContainer(shuffledDeck, shuffledContainer)
-// }
 
 // Reference (#): https://git.generalassemb.ly/SEI-CC/SEI-6-5/blob/main/Unit_1/08-libraries-frameworks/8.2-css-card-library.md
