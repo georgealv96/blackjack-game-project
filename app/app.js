@@ -21,13 +21,12 @@ const originalDeck = buildOriginalDeck()
 
 let availableAmount = 1000
 let betAmount = 0
-let cardCount = 0
 let insuranceAmount
 let tookInsurance
 let aceCount
 let playersCardsSum
 let dealersCardsSum
-let shuffledDeck
+let shuffledDeck = []
 let playersCards
 let dealersCards
 
@@ -151,10 +150,7 @@ function renderGame() {
   // This makes the second page display
   secondPageEl.style.zIndex = '1'
   secondPageEl.style.display = 'grid'
-  // Reset the shuffled deck
-  shuffledDeck = []
-  // It's going to check if the deck needs to be shuffled below
-  shuffledDeck = getNewShuffledDeck()
+  console.log(`my shuffleddeck ${shuffledDeck}`)
   // Show cards on the table with the sum of their values and bet information
   renderTable()
 
@@ -200,6 +196,9 @@ function renderGame() {
   // GAME CONTINUES HERE...
   // When the table is being displayed...
   function renderTable() {
+    if (shuffledDeck.length < 10) {
+      shuffledDeck = getNewShuffledDeck()
+    }
     hitBtnEl.disabled = false
     standBtnEl.disabled = false
     // Reset both dealer's and player's hands
@@ -344,6 +343,8 @@ function renderGame() {
       availableAmount += betAmount
       renderResults("IT'S A PUSH!")
     }
+
+    console.log(`*** ${shuffledDeck}`)
     updateBetInfo()
   }
 
@@ -360,7 +361,7 @@ function renderGame() {
       betAmountEl.innerHTML = `BET: <br><span> $</span>${betAmount}`
       // Update available amount to bet
       availableAmountEl.innerHTML = `AVAILABLE: <br><span> $</span>${availableAmount}`
-      handleChips(evt)
+      renderTable()
     })
   }
   //
@@ -388,14 +389,11 @@ function renderGame() {
 function getNewShuffledDeck() {
   // Create a copy of the originalDeck (leave originalDeck untouched!)
   const tempDeck = [...originalDeck]
-  // If there is less than 8 cards in the deck then shuffle from the original deck
-  if (shuffledDeck < 8) {
-    while (tempDeck.length) {
-      // Get a random index for a card still in the tempDeck
-      const rndIdx = Math.floor(Math.random() * tempDeck.length)
-      // Note the [0] after splice - this is because splice always returns an array and we just want the card object in that array
-      shuffledDeck.push(tempDeck.splice(rndIdx, 1)[0])
-    }
+  while (tempDeck.length) {
+    // Get a random index for a card still in the tempDeck
+    const rndIdx = Math.floor(Math.random() * tempDeck.length)
+    // Note the [0] after splice - this is because splice always returns an array and we just want the card object in that array
+    shuffledDeck.push(tempDeck.splice(rndIdx, 1)[0])
   }
   return shuffledDeck
 }
@@ -425,9 +423,7 @@ function buildOriginalDeck() {
 
 //    THINGS TO DO:
 // > FIX ACES (FIRST TWO ACES AS WELL)
-// > FIX SHUFFLE AND CARD COUNT
-// > GIVE "REPEAT BET" & "GO HOME" BUTTONS FUNCTIONALITY
 // > FIX LOGIC WHEN PLAYER HAS A BLACKJACK
-// > FIX PAYOUT (WHEN PLAYER WINS, PUSHES OR INSURES)
+// > FIX PAYOUT WHEN PLAYER INSURES
 // > DELETE JUNK FROM CODE
 // > WORK ON POSSIBLE BONUSES (AUDIO INCLUDED)
