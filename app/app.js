@@ -41,17 +41,23 @@ const messageEl = document.createElement('div')
 const secondPageEl = document.getElementById('second-page')
 const playerSideEl = document.getElementById('player-side')
 const dealerSideEl = document.getElementById('dealer-side')
-const hitBtnEl = document.getElementById('hit-btn')
-const standBtnEl = document.getElementById('stand-btn')
+// const hitBtnEl = document.getElementById('hit-btn')
+// const standBtnEl = document.getElementById('stand-btn')
 const dealerHasEl = document.getElementById('dealer-bet-info')
 const playerHasEl = document.getElementById('player-bet-info')
+const doubleDownBtn = document.createElement('button')
+const insuranceBtn = document.createElement('button')
+const bottomSideEl = document.getElementById('second-page-buttons')
 
 /*----- event listeners -----*/
 
 chipsEl.addEventListener('click', handleChips)
 placeBetBtn.addEventListener('click', placeBet)
-hitBtnEl.addEventListener('click', handleHitBtn)
-standBtnEl.addEventListener('click', dealersTurn)
+// hitBtnEl.addEventListener('click', handleHitBtn)
+// standBtnEl.addEventListener('click', function () {
+//   dealersTurn()
+//   compareResults()
+// })
 
 /*----- functions -----*/
 init()
@@ -143,6 +149,15 @@ function makeYourBetMsg(message) {
 
 // When the game starts and is displayed in the screen...
 function renderGame() {
+  bottomSideEl.innerHTML = `<button id="hit-btn">HIT</button>
+  <button id="stand-btn">STAND</button>`
+  const hitBtnEl = document.getElementById('hit-btn')
+  const standBtnEl = document.getElementById('stand-btn')
+  hitBtnEl.addEventListener('click', handleHitBtn)
+  standBtnEl.addEventListener('click', function () {
+    dealersTurn()
+    compareResults()
+  })
   // This makes the second page display
   secondPageEl.style.zIndex = '1'
   secondPageEl.style.display = 'grid'
@@ -159,37 +174,36 @@ function renderGame() {
     playersCardsSum <= 11 &&
     availableAmount >= betAmount
   ) {
-    // Creating the button to double down
-    const doubleDownBtn = document.createElement('button')
     doubleDownBtn.setAttribute('id', 'double-btn')
     doubleDownBtn.innerText = 'DOUBLE'
     document.getElementById('second-page-buttons').append(doubleDownBtn)
 
     // When the player clicks on the 'double' button...
-    doubleDownBtn.addEventListener('click', function (evt) {
+    doubleDownBtn.addEventListener('click', function () {
       availableAmount -= betAmount
       betAmount *= 2
       updateBetInfo()
       getAnExtraCard()
       dealersTurn()
-      doubleDownBtn.disabled = true
+      compareResults()
+      doubleDownBtn.remove()
     })
   }
 
   // If the dealer is showing an Ace then let the player take insurance
   if (dealersCards[1].value === 11 && availableAmount >= betAmount / 2) {
-    const insuranceBtn = document.createElement('button')
     insuranceBtn.setAttribute('id', 'insurance-btn')
     insuranceBtn.innerText = 'INSURANCE'
     document.getElementById('second-page-buttons').append(insuranceBtn)
 
     // When the player clicks on the 'insurance' button...
-    insuranceBtn.addEventListener('click', function () {
+    insuranceBtn.addEventListener('click', function (evt) {
       availableAmount -= betAmount / 2
       betAmount += betAmount / 2
       tookInsurance = true
       updateBetInfo()
       insuranceBtn.remove()
+      console.log(evt.target) //
     })
   }
 
@@ -216,6 +230,7 @@ function renderTable() {
     playersCardsSum += playersCards[i].value
     dealersCardsSum += dealersCards[i].value
   }
+
   // If the sum of the player's cards or the sum of the dealer's equal 22 then substract 10
   playersCardsSum = checkForSumOf22(playersCardsSum)
   dealersCardsSum = checkForSumOf22(dealersCardsSum)
@@ -232,6 +247,15 @@ function renderTable() {
   dealerHasEl.innerHTML = `<span id="arrow-3">></span> DEALER has ${
     dealersCardsSum - dealersCards[0].value
   }`
+  // Check if the player has a blackjack
+  if (playersCardsSum === 21 && dealersCardsSum !== 21) {
+    console.log('Player WINS!') // CHANGE THIS
+    dealersTurn()
+    console.log(betAmount + '  ' + availableAmount)
+    availableAmount += betAmount * 2.5
+    renderResults('BLACKJACK!')
+  }
+  // Update current bet information on the screen
   updateBetInfo()
 }
 
@@ -255,6 +279,9 @@ function searchForAce(cardHand) {
 
 // When player hits...
 function handleHitBtn(evt) {
+  // Remove the 'insurance' and 'double' buttons
+  insuranceBtn.remove()
+  doubleDownBtn.remove()
   // Let the player keep clicking on the "Hit" button while the sum of their cards is less than 22
   if (playersCardsSum < 22) {
     getAnExtraCard()
@@ -265,6 +292,7 @@ function handleHitBtn(evt) {
   // Check again for the sum of the player's cards and if it's greater or equal than 22 then it's the dealer's turn now
   if (playersCardsSum >= 22) {
     dealersTurn()
+    compareResults()
   }
 }
 
@@ -305,7 +333,6 @@ function dealersTurn() {
   }
   standBtnEl.disabled = true
   hitBtnEl.disabled = true
-  compareResults()
 }
 
 // When the results are being compared
@@ -315,24 +342,26 @@ function compareResults() {
     (playersCardsSum > dealersCardsSum || dealersCardsSum >= 22)
   ) {
     console.log('Player WINS!') // CHANGE THIS
+    availableAmount += betAmount * 2
     renderResults('PLAYER WINS!')
   } else if (playersCardsSum > 21 || dealersCardsSum > playersCardsSum) {
     console.log('Dealer WINS!') // CHANGE THIS
     renderResults('DEALER WINS!')
   } else {
     console.log("It's a PUSH!") // CHANGE THIS
+    availableAmount += betAmount
     renderResults("IT'S A PUSH!")
   }
+  updateBetInfo()
 }
 
 function renderResults(message) {
-  const bottomSideEl = document.getElementById('second-page-buttons')
-
-  bottomSideEl.innerHTML = `<button>REPEAT BET</button>
+  bottomSideEl.innerHTML = `<button id="repeat-bet">REPEAT BET</button>
   <h1>${message}</h1>
-  <button>HOME PAGE</button>`
+  <button id="home-page">HOME PAGE</button>`
+  document.getElementById('repeat-bet').addEventListener('click', renderGame)
 }
-
+//
 function renderDeckInContainer(deck, container, faceDown) {
   container.innerHTML = ''
   // Let's build the cards as a string of HTML
@@ -392,7 +421,7 @@ function buildOriginalDeck() {
 // Reference (#): https://git.generalassemb.ly/SEI-CC/SEI-6-5/blob/main/Unit_1/08-libraries-frameworks/8.2-css-card-library.md
 
 //    THINGS TO DO:
-// > FIX ACES (FIRST TWO ACES ALSO)
+// > FIX ACES (FIRST TWO ACES AS WELL)
 // > FIX SHUFFLE AND CARD COUNT
 // > GIVE "REPEAT BET" & "GO HOME" BUTTONS FUNCTIONALITY
 // > FIX LOGIC WHEN PLAYER HAS A BLACKJACK
