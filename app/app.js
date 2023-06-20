@@ -224,8 +224,11 @@ function renderGame() {
     }
 
     // If the sum of the player's cards or the sum of the dealer's equal 22 then substract 10
-    playersCardsSum = checkForSumOf22(playersCardsSum)
-    dealersCardsSum = checkForSumOf22(dealersCardsSum)
+    // playersCardsSum = checkForSumOf22(playersCardsSum)
+    // dealersCardsSum = checkForSumOf22(dealersCardsSum)
+    if (searchForAce(playersCards, 2) && playersCardsSum > 21) {
+      playersCardsSum -= 10
+    }
 
     renderDeckInContainer(playersCards, playerSideEl, 0)
     renderDeckInContainer(dealersCards, dealerSideEl, 1)
@@ -264,7 +267,7 @@ function renderGame() {
   function searchForAce(cardHand) {
     let quantity = 0
     cardHand.forEach(function (card) {
-      if (card.isAce) quantity += card.isAce
+      quantity += card.isAce
     })
     return quantity
   }
@@ -304,6 +307,9 @@ function renderGame() {
     playerSideEl.innerHTML += `<div class="card ${
       playersCards[playersCards.length - 1].face
     }"></div>`
+    if (searchForAce(playersCards) && playersCardsSum > 21) {
+      playersCardsSum -= 10 * searchForAce(playersCards)
+    }
     playerHasEl.innerHTML = `<span id="arrow-2">></span> PLAYER has ${playersCardsSum}`
   }
 
@@ -318,6 +324,10 @@ function renderGame() {
       dealersCards.unshift(shuffledDeck.shift())
       dealerSideEl.innerHTML += `<div class="card ${dealersCards[0].face}"></div>`
       dealersCardsSum += dealersCards[0].value
+      console.log(dealersCards.length - 1)
+      if (searchForAce(dealersCards) && dealersCardsSum > 21) {
+        dealersCardsSum -= 10 * searchForAce(dealersCards)
+      }
       dealerHasEl.innerHTML = `<span id="arrow-2">></span> DEALER has ${dealersCardsSum}`
       console.log(dealersCardsSum)
       console.log(dealersCards)
@@ -427,3 +437,5 @@ function buildOriginalDeck() {
 // > FIX PAYOUT WHEN PLAYER INSURES
 // > DELETE JUNK FROM CODE
 // > WORK ON POSSIBLE BONUSES (AUDIO INCLUDED)
+
+// ISSUE WITH ACES: IT'S SUBSTARCTING 10 EACH TIME IT HITS 22+, WHEN IT SHOULD BE JUST SUBSTRACTING DEPENDING ON THE AMOUNT OF ACES
