@@ -19,7 +19,7 @@ const ranks = [
 const originalDeck = buildOriginalDeck()
 /*----- app's state (variables) -----*/
 
-let availableAmount
+let availableAmount = 1000
 let betAmount
 let cardCount
 let insuranceAmount
@@ -41,8 +41,8 @@ const messageEl = document.createElement('div')
 const secondPageEl = document.getElementById('second-page')
 const playerSideEl = document.getElementById('player-side')
 const dealerSideEl = document.getElementById('dealer-side')
-// const hitBtnEl = document.getElementById('hit-btn')
-// const standBtnEl = document.getElementById('stand-btn')
+const hitBtnEl = document.getElementById('hit-btn')
+const standBtnEl = document.getElementById('stand-btn')
 const dealerHasEl = document.getElementById('dealer-bet-info')
 const playerHasEl = document.getElementById('player-bet-info')
 const doubleDownBtn = document.createElement('button')
@@ -53,18 +53,17 @@ const bottomSideEl = document.getElementById('second-page-buttons')
 
 chipsEl.addEventListener('click', handleChips)
 placeBetBtn.addEventListener('click', placeBet)
-// hitBtnEl.addEventListener('click', handleHitBtn)
-// standBtnEl.addEventListener('click', function () {
-//   dealersTurn()
-//   compareResults()
-// })
+hitBtnEl.addEventListener('click', handleHitBtn)
+standBtnEl.addEventListener('click', function () {
+  dealersTurn()
+  compareResults()
+})
 
 /*----- functions -----*/
 init()
 
 // When the page initializes...
 function init() {
-  availableAmount = 1000
   betAmount = 0
   cardCount = 0
 }
@@ -124,6 +123,7 @@ function handleChips(evt) {
 function placeBet(evt) {
   // If the player placed a bet, start the game when they click the "Place Bet" button
   if (betAmount > 0) {
+    secondPageEl.style.opacity = '1'
     renderGame()
   } else {
     evt.preventDefault()
@@ -149,15 +149,6 @@ function makeYourBetMsg(message) {
 
 // When the game starts and is displayed in the screen...
 function renderGame() {
-  bottomSideEl.innerHTML = `<button id="hit-btn">HIT</button>
-  <button id="stand-btn">STAND</button>`
-  const hitBtnEl = document.getElementById('hit-btn')
-  const standBtnEl = document.getElementById('stand-btn')
-  hitBtnEl.addEventListener('click', handleHitBtn)
-  standBtnEl.addEventListener('click', function () {
-    dealersTurn()
-    compareResults()
-  })
   // This makes the second page display
   secondPageEl.style.zIndex = '1'
   secondPageEl.style.display = 'grid'
@@ -287,7 +278,6 @@ function handleHitBtn(evt) {
     getAnExtraCard()
   } else {
     evt.preventDefault()
-    // ---> SHOW MESSAGE (PLAYER BUSTED)
   }
   // Check again for the sum of the player's cards and if it's greater or equal than 22 then it's the dealer's turn now
   if (playersCardsSum >= 22) {
@@ -355,11 +345,16 @@ function compareResults() {
   updateBetInfo()
 }
 
+// Render results and a 'bet again' button
 function renderResults(message) {
-  bottomSideEl.innerHTML = `<button id="repeat-bet">REPEAT BET</button>
-  <h1>${message}</h1>
-  <button id="home-page">HOME PAGE</button>`
-  document.getElementById('repeat-bet').addEventListener('click', renderGame)
+  bottomSideEl.innerHTML = `<h1>${message}</h1>
+  <button id="go-back">BET AGAIN</button>`
+  const goBackBtn = document.getElementById('go-back')
+  goBackBtn.addEventListener('click', function (evt) {
+    handleChips(evt)
+    secondPageEl.style.opacity = '0'
+    secondPageEl.style.zIndex = '-1'
+  })
 }
 //
 function renderDeckInContainer(deck, container, faceDown) {
