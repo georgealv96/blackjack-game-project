@@ -17,6 +17,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-shadow: 0px 2px 10px darkcyan;
 }
 
 h1 {
@@ -112,6 +113,7 @@ footer > p {
 #place-bet {
   font-size: 4vmin;
   padding: 2vmin;
+  margin-top: 3vmin;
   border-radius: 2vmin;
   border: solid 0.5vmin;
   background-color: lightgray;
@@ -159,6 +161,7 @@ footer > div {
 }
 #second-page-title {
   padding: 2vmin 0;
+  text-shadow: 0px 5px 10px green;
 }
 
 #second-page-title span {
@@ -179,7 +182,7 @@ footer > div {
 #second-page-buttons > button {
   width: 23vmin;
   height: 6vmin;
-  margin: 0 5vmin 2vmin;
+  margin: 0 5vmin 4vmin;
   font-size: 3vmin;
   border-radius: 2vmin;
   border: solid 2px;
@@ -195,10 +198,12 @@ footer > div {
 }
 
 #player-bet-info, #dealer-bet-info {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: lightgray;
   padding: 0 1vmin;
   border: black solid 1px;
   border-radius: 1vmin;
+  box-shadow: 3px 3px 3px darkgreen;
 }
 
 #arrow-1 {
@@ -229,4 +234,12 @@ footer > div {
   margin: 0 1.5vmin;
   box-shadow: 5px 5px 5px darkgreen;
   border: solid black 1.5px;
+}
+
+#second-page-buttons > h1 {
+  font-size: 7vmin;
+  color: white;
+  text-shadow: 0px 2px 10px black;
+  margin-bottom: 4vmin;
+  padding: 0 2vmin;
 }

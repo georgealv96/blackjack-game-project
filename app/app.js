@@ -51,7 +51,7 @@ const playerHasEl = document.getElementById('player-bet-info')
 chipsEl.addEventListener('click', handleChips)
 placeBetBtn.addEventListener('click', placeBet)
 hitBtnEl.addEventListener('click', handleHitBtn)
-standBtnEl.addEventListener('click', handleStandBtn)
+standBtnEl.addEventListener('click', dealersTurn)
 
 /*----- functions -----*/
 init()
@@ -126,7 +126,7 @@ function placeBet(evt) {
   }
 }
 
-// When the game needs to pop up a message...
+// Show a message when the player wants to play but hasn't bet any money yet
 function makeYourBetMsg(message) {
   messageEl.innerText = message
   // Insert the message element in the <div> inside of <footer>
@@ -153,7 +153,7 @@ function renderGame() {
   // Show cards on the table with the sum of their values and bet information
   renderTable()
 
-  // If the sum of the player's first two cards is 9, 10 or 11 and they have enough funds then let them double
+  // If the sum of the player's first two cards is 9, 10 or 11 and they have enough funds then let them double down
   if (
     playersCardsSum >= 9 &&
     playersCardsSum <= 11 &&
@@ -166,14 +166,16 @@ function renderGame() {
     document.getElementById('second-page-buttons').append(doubleDownBtn)
 
     // When the player clicks on the 'double' button...
-    doubleDownBtn.addEventListener('click', function () {
+    doubleDownBtn.addEventListener('click', function (evt) {
       availableAmount -= betAmount
       betAmount *= 2
       updateBetInfo()
       getAnExtraCard()
-      showDealersSecondCard()
+      dealersTurn()
+      doubleDownBtn.disabled = true
     })
   }
+
   // If the dealer is showing an Ace then let the player take insurance
   if (dealersCards[1].value === 11 && availableAmount >= betAmount / 2) {
     const insuranceBtn = document.createElement('button')
@@ -187,8 +189,11 @@ function renderGame() {
       betAmount += betAmount / 2
       tookInsurance = true
       updateBetInfo()
+      insuranceBtn.remove()
     })
   }
+
+  // GAME CONTINUES HERE...
 }
 
 // When the table is being displayed...
@@ -257,9 +262,13 @@ function handleHitBtn(evt) {
     evt.preventDefault()
     // ---> SHOW MESSAGE (PLAYER BUSTED)
   }
+  // Check again for the sum of the player's cards and if it's greater or equal than 22 then it's the dealer's turn now
+  if (playersCardsSum >= 22) {
+    dealersTurn()
+  }
 }
 
-//
+// Update the bet information on the table
 function updateBetInfo() {
   document.getElementById(
     'your-bet-info'
@@ -269,7 +278,7 @@ function updateBetInfo() {
   ).innerHTML = `<span id="arrow-4">></span> AVAILABLE: $${availableAmount}`
 }
 
-//
+// Get the player an extra card
 function getAnExtraCard() {
   playersCards.push(shuffledDeck.shift())
   playersCardsSum += playersCards[playersCards.length - 1].value
@@ -279,18 +288,13 @@ function getAnExtraCard() {
   playerHasEl.innerHTML = `<span id="arrow-2">></span> PLAYER has ${playersCardsSum}`
 }
 
-//
-function showDealersSecondCard() {
+// Show the dealer's second card
+function dealersTurn() {
   dealerSideEl.innerHTML = ''
   dealersCards.forEach(function (card) {
     dealerSideEl.innerHTML += `<div class="card ${card.face}"></div>`
   })
   dealerHasEl.innerHTML = `<span id="arrow-2">></span> DEALER has ${dealersCardsSum}`
-}
-
-// When player stands...
-function handleStandBtn(evt) {
-  showDealersSecondCard()
   while (dealersCardsSum < 17) {
     dealersCards.unshift(shuffledDeck.shift())
     dealerSideEl.innerHTML += `<div class="card ${dealersCards[0].face}"></div>`
@@ -301,16 +305,32 @@ function handleStandBtn(evt) {
   }
   standBtnEl.disabled = true
   hitBtnEl.disabled = true
+  compareResults()
 }
 
+// When the results are being compared
 function compareResults() {
-  if (playersCardsSum > dealersCardsSum) {
-    // what happens when the player wins here
-  } else if (playersCardsSum < dealersCardsSum) {
-    // what happens when the dealer wins here
+  if (
+    playersCardsSum < 22 &&
+    (playersCardsSum > dealersCardsSum || dealersCardsSum >= 22)
+  ) {
+    console.log('Player WINS!') // CHANGE THIS
+    renderResults('PLAYER WINS!')
+  } else if (playersCardsSum > 21 || dealersCardsSum > playersCardsSum) {
+    console.log('Dealer WINS!') // CHANGE THIS
+    renderResults('DEALER WINS!')
   } else {
-    // what happens when the player pushes here
+    console.log("It's a PUSH!") // CHANGE THIS
+    renderResults("IT'S A PUSH!")
   }
+}
+
+function renderResults(message) {
+  const bottomSideEl = document.getElementById('second-page-buttons')
+
+  bottomSideEl.innerHTML = `<button>REPEAT BET</button>
+  <h1>${message}</h1>
+  <button>HOME PAGE</button>`
 }
 
 function renderDeckInContainer(deck, container, faceDown) {
@@ -370,3 +390,12 @@ function buildOriginalDeck() {
 }
 
 // Reference (#): https://git.generalassemb.ly/SEI-CC/SEI-6-5/blob/main/Unit_1/08-libraries-frameworks/8.2-css-card-library.md
+
+//    THINGS TO DO:
+// > FIX ACES (FIRST TWO ACES ALSO)
+// > FIX SHUFFLE AND CARD COUNT
+// > GIVE "REPEAT BET" & "GO HOME" BUTTONS FUNCTIONALITY
+// > FIX LOGIC WHEN PLAYER HAS A BLACKJACK
+// > FIX PAYOUT (WHEN PLAYER WINS, PUSHES OR INSURES)
+// > DELETE JUNK FROM CODE
+// > WORK ON POSSIBLE BONUSES (AUDIO INCLUDED)
