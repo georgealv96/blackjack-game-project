@@ -21,8 +21,6 @@ const originalDeck = buildOriginalDeck()
 
 let availableAmount = 1000
 let betAmount = 0
-let insuranceAmount
-let tookInsurance
 let aceCount
 let playersCardsSum
 let dealersCardsSum
@@ -43,7 +41,6 @@ const dealerSideEl = document.getElementById('dealer-side')
 const dealerHasEl = document.getElementById('dealer-bet-info')
 const playerHasEl = document.getElementById('player-bet-info')
 const doubleDownBtn = document.createElement('button')
-const insuranceBtn = document.createElement('button')
 const bottomSideEl = document.getElementById('second-page-buttons')
 
 /*----- event listeners -----*/
@@ -176,23 +173,6 @@ function renderGame() {
     })
   }
 
-  // If the dealer is showing an Ace then let the player take insurance
-  if (dealersCards[1].value === 11 && availableAmount >= betAmount / 2) {
-    insuranceBtn.setAttribute('id', 'insurance-btn')
-    insuranceBtn.innerText = 'INSURANCE'
-    document.getElementById('second-page-buttons').append(insuranceBtn)
-
-    // When the player clicks on the 'insurance' button...
-    insuranceBtn.addEventListener('click', function (evt) {
-      availableAmount -= betAmount / 2
-      betAmount += betAmount / 2
-      tookInsurance = true
-      updateBetInfo()
-      insuranceBtn.remove()
-      console.log(evt.target) //
-    })
-  }
-
   // GAME CONTINUES HERE...
   // When the table is being displayed...
   function renderTable() {
@@ -207,8 +187,6 @@ function renderGame() {
     // Reset both dealer's and player's cards sum
     playersCardsSum = 0
     dealersCardsSum = 0
-    // Reset insurance status
-    tookInsurance = false
     for (let i = 0; i < 4; i++) {
       if (i % 2 === 0) {
         playersCards.push(shuffledDeck.shift())
@@ -224,11 +202,8 @@ function renderGame() {
     }
 
     // If the sum of the player's cards or the sum of the dealer's equal 22 then substract 10
-    // playersCardsSum = checkForSumOf22(playersCardsSum)
-    // dealersCardsSum = checkForSumOf22(dealersCardsSum)
-    if (searchForAce(playersCards, 2) && playersCardsSum > 21) {
-      playersCardsSum -= 10
-    }
+    playersCardsSum = checkForSumOf22(playersCardsSum)
+    dealersCardsSum = checkForSumOf22(dealersCardsSum)
 
     renderDeckInContainer(playersCards, playerSideEl, 0)
     renderDeckInContainer(dealersCards, dealerSideEl, 1)
@@ -267,15 +242,14 @@ function renderGame() {
   function searchForAce(cardHand) {
     let quantity = 0
     cardHand.forEach(function (card) {
-      quantity += card.isAce
+      if (card.isAce) quantity += card.isAce
     })
     return quantity
   }
 
   // When player hits...
   function handleHitBtn(evt) {
-    // Remove the 'insurance' and 'double' buttons
-    insuranceBtn.remove()
+    // Remove the 'double' button
     doubleDownBtn.remove()
     // Let the player keep clicking on the "Hit" button while the sum of their cards is less than 22
     if (playersCardsSum < 22) {
@@ -307,9 +281,6 @@ function renderGame() {
     playerSideEl.innerHTML += `<div class="card ${
       playersCards[playersCards.length - 1].face
     }"></div>`
-    if (searchForAce(playersCards) && playersCardsSum > 21) {
-      playersCardsSum -= 10 * searchForAce(playersCards)
-    }
     playerHasEl.innerHTML = `<span id="arrow-2">></span> PLAYER has ${playersCardsSum}`
   }
 
@@ -324,10 +295,6 @@ function renderGame() {
       dealersCards.unshift(shuffledDeck.shift())
       dealerSideEl.innerHTML += `<div class="card ${dealersCards[0].face}"></div>`
       dealersCardsSum += dealersCards[0].value
-      console.log(dealersCards.length - 1)
-      if (searchForAce(dealersCards) && dealersCardsSum > 21) {
-        dealersCardsSum -= 10 * searchForAce(dealersCards)
-      }
       dealerHasEl.innerHTML = `<span id="arrow-2">></span> DEALER has ${dealersCardsSum}`
       console.log(dealersCardsSum)
       console.log(dealersCards)
@@ -434,8 +401,5 @@ function buildOriginalDeck() {
 //    THINGS TO DO:
 // > FIX ACES (FIRST TWO ACES AS WELL)
 // > FIX LOGIC WHEN PLAYER HAS A BLACKJACK
-// > FIX PAYOUT WHEN PLAYER INSURES
 // > DELETE JUNK FROM CODE
 // > WORK ON POSSIBLE BONUSES (AUDIO INCLUDED)
-
-// ISSUE WITH ACES: IT'S SUBSTARCTING 10 EACH TIME IT HITS 22+, WHEN IT SHOULD BE JUST SUBSTRACTING DEPENDING ON THE AMOUNT OF ACES
