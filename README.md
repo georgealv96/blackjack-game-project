@@ -34,6 +34,11 @@ https://www.blackjackapprenticeship.com/how-to-play-blackjack/
 —The ability to double down when your first two cards add up to 9, 10 or 11 (only one card given when
 doubling down). </br>
 
+## Technologies Used:
+
+—HTML </br>
+—CSS </br>
+—JavaScript </br>
 
 ## My experience building this project
 
