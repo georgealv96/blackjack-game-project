@@ -4,7 +4,7 @@
 
 This project is your classic blackjack game but one deck at a time. I was inspired by my most favorite and 
 the nearest gambling town that I have from home (West Wendover, NV) to create this single-deck version.
-Also, I'm a blackjack fanatic! so I couldn't skip this opportunity to make one myself.
+Also, I'm a blackjack fanatic! so I couldn't skip this opportunity to make one myself for my very first project of this type (a web-based game).
 
 ## Rules to the game:
 
@@ -27,12 +27,12 @@ https://www.blackjackapprenticeship.com/how-to-play-blackjack/
 
 <b>Note:</b> <i>Keep in mind that some blackjack features may vary.</i>
 
-## Some features of this project include:
+## Some features and details about this project/game include:
 
 —A wagering system. </br>
 —The dealer must hit on soft 17 and stand on hard 17. </br>
-—The ability to double down when your first two cards add up to 9, 10 or 11 (only one card given when
-doubling down). </br>
+—The ability to double down when your first two cards add up to 9, 10 or 11 (only one card given when doubling down). </br>
+-Splitting cards is NOT available... yet!
 
 ## Technologies Used:
 
@@ -52,5 +52,4 @@ casino-related stuff, blackjack, math and coding—, I encountered a few problem
 —How to keep the wagering system decently consistent throghout the entire time an user
 is playing regardless of the amount of rounds played.
 
-I'm working on how to make this entire game as accurate as possible so the user can have the
-best experience and most fun possible!
+I'm working on making this entire game as accurate as possible so the user can have the best experience and most fun possible!
