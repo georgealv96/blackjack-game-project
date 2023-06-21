@@ -15,10 +15,10 @@ const ranks = [
   'K',
   'A'
 ]
-// Build an 'original' deck of 'card' objects used to create shuffled decks
-const originalDeck = buildOriginalDeck()
+
 /*----- app's state (variables) -----*/
 
+let originalDeck
 let availableAmount = 1000
 let betAmount = 0
 let playersCardsSum
@@ -160,7 +160,6 @@ function renderGame() {
     doubleDownBtn.setAttribute('id', 'double-btn')
     doubleDownBtn.innerText = 'DOUBLE'
     document.getElementById('second-page-buttons').append(doubleDownBtn)
-    console.log(betAmount) // DELETE LATER
     // When the player clicks on the 'double' button...
     doubleDownBtn.addEventListener('click', function () {
       availableAmount -= betAmount
@@ -175,9 +174,13 @@ function renderGame() {
 
   // When the table is being displayed...
   function renderTable() {
+    // Build and nitialize the value of the properties of the original deck
+    originalDeck = buildOriginalDeck()
+    // Check if a new shuffled deck is needed, and then shuffle the original deck
     if (shuffledDeck.length < 10) {
       shuffledDeck = getNewShuffledDeck()
     }
+    // Enable 'hit' and 'stand' buttons
     hitBtnEl.disabled = false
     standBtnEl.disabled = false
     // Reset both dealer's and player's hands
@@ -232,9 +235,9 @@ function renderGame() {
   function searchForAce(cardHand, cardSum) {
     if (cardSum > 21) {
       for (card of cardHand) {
-        if (card.isAce === 1) {
+        if (card.value === 11) {
           cardSum -= 10
-          card.isAce = 0
+          card.value = 1
           break
         }
       }
@@ -296,10 +299,11 @@ function renderGame() {
 
     // Grab an extra card as long as the total value of the hand is less than 17
     while (dealersCardsSum <= 17) {
+      // If the sum is 17, check for a soft or a hard 17
       if (
         (dealersCardsSum === 17 &&
           dealersCards.some(function (card) {
-            return card.isAce === 1
+            return card.value === 11
           })) ||
         dealersCardsSum < 17
       ) {
@@ -396,9 +400,7 @@ function buildOriginalDeck() {
         // Setting the 'value' property for game of blackjack, not war
         value: Number(rank) || (rank === 'A' ? 11 : 10),
         // The 'back' property maps to the library's CSS classes for cards
-        back: `back-red`,
-        // Store if card is an Ace (1) or not (0)
-        isAce: rank === 'A' ? 1 : 0
+        back: `back-red`
       })
     })
   })
