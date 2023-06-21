@@ -201,9 +201,8 @@ function renderGame() {
       dealersCardsSum += dealersCards[i].value
     }
 
-    // If the sum of the player's cards or the sum of the dealer's equal 22 then substract 10
-    playersCardsSum = checkForSumOf22(playersCardsSum)
-    dealersCardsSum = checkForSumOf22(dealersCardsSum)
+    playersCardsSum = searchForAce(playersCards, playersCardsSum)
+    dealersCardsSum = searchForAce(dealersCards, dealersCardsSum)
 
     renderDeckInContainer(playersCards, playerSideEl, 0)
     renderDeckInContainer(dealersCards, dealerSideEl, 1)
@@ -224,27 +223,26 @@ function renderGame() {
       console.log(betAmount + '  ' + availableAmount)
       availableAmount += betAmount * 2.5
       renderResults('BLACKJACK!')
+    } else if (playersCardsSum !== 21 && dealersCardsSum === 21) {
+      dealersTurn()
+      renderResults('DEALER WINS!')
     }
     // Update current bet information on the screen
     updateBetInfo()
   }
 
-  // Check for a sum of 22 (two Aces)
-  function checkForSumOf22(sum) {
-    if (sum === 22) {
-      return sum - 10
-    } else {
-      return sum
+  // Search for Aces in a playing hand and convert them to ones if necessary
+  function searchForAce(cardHand, cardSum) {
+    if (cardSum > 21) {
+      for (card of cardHand) {
+        if (card.isAce === 1) {
+          cardSum -= 10
+          card.isAce = 0
+          break
+        }
+      }
     }
-  }
-
-  // Search for an Ace in a playing hand
-  function searchForAce(cardHand) {
-    let quantity = 0
-    cardHand.forEach(function (card) {
-      if (card.isAce) quantity += card.isAce
-    })
-    return quantity
+    return cardSum
   }
 
   // When player hits...
@@ -281,6 +279,7 @@ function renderGame() {
     playerSideEl.innerHTML += `<div class="card ${
       playersCards[playersCards.length - 1].face
     }"></div>`
+    playersCardsSum = searchForAce(playersCards, playersCardsSum)
     playerHasEl.innerHTML = `<span id="arrow-2">></span> PLAYER has ${playersCardsSum}`
   }
 
@@ -295,6 +294,7 @@ function renderGame() {
       dealersCards.unshift(shuffledDeck.shift())
       dealerSideEl.innerHTML += `<div class="card ${dealersCards[0].face}"></div>`
       dealersCardsSum += dealersCards[0].value
+      dealersCardsSum = searchForAce(dealersCards, dealersCardsSum)
       dealerHasEl.innerHTML = `<span id="arrow-2">></span> DEALER has ${dealersCardsSum}`
       console.log(dealersCardsSum)
       console.log(dealersCards)
@@ -400,6 +400,6 @@ function buildOriginalDeck() {
 
 //    THINGS TO DO:
 // > FIX ACES (FIRST TWO ACES AS WELL)
-// > FIX LOGIC WHEN PLAYER HAS A BLACKJACK
+// > FIX WHAT DEALER STANDS ON
 // > DELETE JUNK FROM CODE
 // > WORK ON POSSIBLE BONUSES (AUDIO INCLUDED)
