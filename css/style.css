@@ -17,7 +17,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-shadow: 0px 2px 10px darkcyan;
+  text-shadow: 0px 2px 10px gray;
 }
 
 h1 {

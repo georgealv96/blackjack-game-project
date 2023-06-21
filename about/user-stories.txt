@@ -15,7 +15,7 @@
   // As an user, I'd like to see how much money I have available, and also the sum of the player's cards.
 
   // As an user, I'd like to be able to select one of the following options:
-     hit, stand, insurance (if possible) or double-down (if possible).
+     hit, stand, or double-down (if possible).
 
   // If the player hits:
 

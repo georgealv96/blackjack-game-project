@@ -21,7 +21,6 @@ const originalDeck = buildOriginalDeck()
 
 let availableAmount = 1000
 let betAmount = 0
-let aceCount
 let playersCardsSum
 let dealersCardsSum
 let shuffledDeck = []
@@ -108,7 +107,6 @@ function placeBet(evt) {
     secondPageEl.style.opacity = '1'
     renderGame()
   } else if (betAmount === 0 && availableAmount === 0) {
-    evt.preventDefault()
     makeYourBetMsg(`Insufficient funds. Reset page.`)
     return
   } else {
@@ -144,10 +142,11 @@ function renderGame() {
     dealersTurn()
     compareResults()
   })
+
   // This makes the second page display
   secondPageEl.style.zIndex = '1'
   secondPageEl.style.display = 'grid'
-  console.log(`my shuffleddeck ${shuffledDeck}`)
+
   // Show cards on the table with the sum of their values and bet information
   renderTable()
 
@@ -157,10 +156,11 @@ function renderGame() {
     playersCardsSum <= 11 &&
     availableAmount >= betAmount
   ) {
+    // Create the button
     doubleDownBtn.setAttribute('id', 'double-btn')
     doubleDownBtn.innerText = 'DOUBLE'
     document.getElementById('second-page-buttons').append(doubleDownBtn)
-
+    console.log(betAmount) // DELETE LATER
     // When the player clicks on the 'double' button...
     doubleDownBtn.addEventListener('click', function () {
       availableAmount -= betAmount
@@ -173,7 +173,6 @@ function renderGame() {
     })
   }
 
-  // GAME CONTINUES HERE...
   // When the table is being displayed...
   function renderTable() {
     if (shuffledDeck.length < 10) {
@@ -201,32 +200,30 @@ function renderGame() {
       dealersCardsSum += dealersCards[i].value
     }
 
+    // Check hands if they aces that need to be converted to ones
     playersCardsSum = searchForAce(playersCards, playersCardsSum)
     dealersCardsSum = searchForAce(dealersCards, dealersCardsSum)
 
+    // Display first two cards on the screen
     renderDeckInContainer(playersCards, playerSideEl, 0)
     renderDeckInContainer(dealersCards, dealerSideEl, 1)
-    ///////////////////////////////
-    console.log(playersCards) //
-    console.log(dealersCards) //
-    console.log(playersCardsSum) //
-    ///////////////////////////////
+
     // Update bet-info
     playerHasEl.innerHTML = `<span id="arrow-2">></span> PLAYER has ${playersCardsSum}`
     dealerHasEl.innerHTML = `<span id="arrow-3">></span> DEALER has ${
       dealersCardsSum - dealersCards[0].value
     }`
-    // Check if the player has a blackjack
+
+    // Check if the player or the dealer have a blackjack
     if (playersCardsSum === 21 && dealersCardsSum !== 21) {
-      console.log('Player WINS!') // CHANGE THIS
       dealersTurn()
-      console.log(betAmount + '  ' + availableAmount)
       availableAmount += betAmount * 2.5
       renderResults('BLACKJACK!')
     } else if (playersCardsSum !== 21 && dealersCardsSum === 21) {
       dealersTurn()
       renderResults('DEALER WINS!')
     }
+
     // Update current bet information on the screen
     updateBetInfo()
   }
@@ -274,54 +271,67 @@ function renderGame() {
 
   // Get the player an extra card
   function getAnExtraCard() {
+    // The player's hand gets a new card
     playersCards.push(shuffledDeck.shift())
+    // The value of the new card is added to the sum of their previous cards
     playersCardsSum += playersCards[playersCards.length - 1].value
+    // The new card gets displayed
     playerSideEl.innerHTML += `<div class="card ${
       playersCards[playersCards.length - 1].face
     }"></div>`
     playersCardsSum = searchForAce(playersCards, playersCardsSum)
+    // The new total for the player's hand is displayed
     playerHasEl.innerHTML = `<span id="arrow-2">></span> PLAYER has ${playersCardsSum}`
   }
 
-  // Show the dealer's second card
+  // Show the dealer's second card and extra cards if necessary
   function dealersTurn() {
+    // Flip the second card face up
     dealerSideEl.innerHTML = ''
     dealersCards.forEach(function (card) {
       dealerSideEl.innerHTML += `<div class="card ${card.face}"></div>`
     })
+    // Display the sum of both first cards
     dealerHasEl.innerHTML = `<span id="arrow-2">></span> DEALER has ${dealersCardsSum}`
-    while (dealersCardsSum < 17) {
-      dealersCards.unshift(shuffledDeck.shift())
-      dealerSideEl.innerHTML += `<div class="card ${dealersCards[0].face}"></div>`
-      dealersCardsSum += dealersCards[0].value
-      dealersCardsSum = searchForAce(dealersCards, dealersCardsSum)
-      dealerHasEl.innerHTML = `<span id="arrow-2">></span> DEALER has ${dealersCardsSum}`
-      console.log(dealersCardsSum)
-      console.log(dealersCards)
+
+    // Grab an extra card as long as the total value of the hand is less than 17
+    while (dealersCardsSum <= 17) {
+      if (
+        (dealersCardsSum === 17 &&
+          dealersCards.some(function (card) {
+            return card.isAce === 1
+          })) ||
+        dealersCardsSum < 17
+      ) {
+        dealersCards.unshift(shuffledDeck.shift())
+        dealerSideEl.innerHTML += `<div class="card ${dealersCards[0].face}"></div>`
+        dealersCardsSum += dealersCards[0].value
+        dealersCardsSum = searchForAce(dealersCards, dealersCardsSum)
+        dealerHasEl.innerHTML = `<span id="arrow-2">></span> DEALER has ${dealersCardsSum}`
+      } else {
+        break
+      }
     }
+    // Disable 'hit' and 'stand' buttons
     standBtnEl.disabled = true
     hitBtnEl.disabled = true
   }
 
-  // When the results are being compared
+  // When the results are being compared...
   function compareResults() {
     if (
       playersCardsSum < 22 &&
       (playersCardsSum > dealersCardsSum || dealersCardsSum >= 22)
     ) {
-      console.log('Player WINS!') // CHANGE THIS
       availableAmount += betAmount * 2
       renderResults('PLAYER WINS!')
     } else if (playersCardsSum > 21 || dealersCardsSum > playersCardsSum) {
-      console.log('Dealer WINS!') // CHANGE THIS
       renderResults('DEALER WINS!')
     } else {
-      console.log("It's a PUSH!") // CHANGE THIS
       availableAmount += betAmount
       renderResults("IT'S A PUSH!")
     }
-
-    console.log(`*** ${shuffledDeck}`)
+    // Update the wagering information displaying on the screen
     updateBetInfo()
   }
 
@@ -330,9 +340,11 @@ function renderGame() {
     bottomSideEl.innerHTML = `<h1>${message}</h1>
   <button id="go-back">BET AGAIN</button>`
     const goBackBtn = document.getElementById('go-back')
+    // When clicked, this button will take user to the main page
     goBackBtn.addEventListener('click', function (evt) {
       secondPageEl.style.opacity = '0'
       secondPageEl.style.zIndex = '-1'
+      // Reset bet to zero
       betAmount = 0
       // Update bet amounts
       betAmountEl.innerHTML = `BET: <br><span> $</span>${betAmount}`
@@ -341,7 +353,8 @@ function renderGame() {
       renderTable()
     })
   }
-  //
+
+  // When the cards are being delt...
   function renderDeckInContainer(deck, container, faceDown) {
     container.innerHTML = ''
     // Let's build the cards as a string of HTML
@@ -354,17 +367,13 @@ function renderGame() {
         cardsHtml += `<div class="card ${card.face}"></div>`
       }
     })
-    // Or, use reduce to 'reduce' the array into a single thing - in this case a string of HTML markup
-    // const cardsHtml = deck.reduce(function(html, card) {
-    //   return html + `<div class="card ${card.face}"></div>`;
-    // }, '');
     container.innerHTML = cardsHtml
   }
 }
 
 // When a shuffled deck is needed... (#)
 function getNewShuffledDeck() {
-  // Create a copy of the originalDeck (leave originalDeck untouched!)
+  // Create a copy of the originalDeck
   const tempDeck = [...originalDeck]
   while (tempDeck.length) {
     // Get a random index for a card still in the tempDeck
@@ -399,7 +408,5 @@ function buildOriginalDeck() {
 // Reference (#): https://git.generalassemb.ly/SEI-CC/SEI-6-5/blob/main/Unit_1/08-libraries-frameworks/8.2-css-card-library.md
 
 //    THINGS TO DO:
-// > FIX ACES (FIRST TWO ACES AS WELL)
 // > FIX WHAT DEALER STANDS ON
-// > DELETE JUNK FROM CODE
 // > WORK ON POSSIBLE BONUSES (AUDIO INCLUDED)
