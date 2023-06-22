@@ -61,8 +61,10 @@ function handleChips(evt) {
   if (
     chipSelected !== 'chip-clear' &&
     evt.target.getAttribute('class') !== 'chips'
-  )
+  ) {
+    singleChipSoundEffect.load()
     singleChipSoundEffect.play()
+  }
   // Substract from the available amount and add to the
   // bet amount as the player clicks on chips, checking that
   // the player have sufficient funds each time
