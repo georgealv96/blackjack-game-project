@@ -1,5 +1,7 @@
 # Single-deck Blackjack
 
+### Link to the game: https://github.com/georgealv96/blackjack-game-project
+
 ## One of the most popular casino games out there!
 
 This project is your classic blackjack game but one deck at a time. I was inspired by my most favorite and
