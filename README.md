@@ -1,6 +1,6 @@
 # Single-deck Blackjack
 
-### Link to the game: https://github.com/georgealv96/blackjack-game-project
+### Link to the game: https://georgealv96.github.io/blackjack-game-project/
 
 ## One of the most popular casino games out there!
 
