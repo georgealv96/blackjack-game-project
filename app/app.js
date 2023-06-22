@@ -15,7 +15,6 @@ const ranks = [
   'K',
   'A'
 ]
-const cardSoundEffect = new Audio('../about/audio/card.mp3')
 const chipsSoundEffect = new Audio('../about/audio/chips.wav')
 const singleChipSoundEffect = new Audio('../about/audio/single-chip.wav')
 const successSoundEffect = new Audio('../about/audio/success.wav')
@@ -239,7 +238,6 @@ function renderGame() {
       failureSoundEffect.play()
       renderResults('DEALER WINS!')
     }
-
     // Update current bet information on the screen
     updateBetInfo()
   }
