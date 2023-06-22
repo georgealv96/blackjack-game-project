@@ -15,6 +15,11 @@ const ranks = [
   'K',
   'A'
 ]
+const cardSoundEffect = new Audio('../about/audio/card.mp3')
+const chipsSoundEffect = new Audio('../about/audio/chips.wav')
+const singleChipSoundEffect = new Audio('../about/audio/single-chip.wav')
+const successSoundEffect = new Audio('../about/audio/success.wav')
+const failureSoundEffect = new Audio('../about/audio/failure.wav')
 
 /*----- app's state (variables) -----*/
 
@@ -53,6 +58,12 @@ placeBetBtn.addEventListener('click', placeBet)
 function handleChips(evt) {
   // Identify which chip was selected
   let chipSelected = evt.target.getAttribute('id')
+  // If the clicked button is NOT 'clear' or anywhere outside the actual chips then play a sound effect
+  if (
+    chipSelected !== 'chip-clear' &&
+    evt.target.getAttribute('class') !== 'chips'
+  )
+    singleChipSoundEffect.play()
   // Substract from the available amount and add to the
   // bet amount as the player clicks on chips, checking that
   // the player have sufficient funds each time
@@ -104,6 +115,7 @@ function handleChips(evt) {
 function placeBet(evt) {
   // If the player placed a bet, start the game when they click the "Place Bet" button
   if (betAmount > 0) {
+    chipsSoundEffect.play()
     secondPageEl.style.opacity = '1'
     renderGame()
   } else if (betAmount === 0 && availableAmount === 0) {
@@ -220,9 +232,11 @@ function renderGame() {
     if (playersCardsSum === 21 && dealersCardsSum !== 21) {
       dealersTurn()
       availableAmount += betAmount * 2.5
-      renderResults('BLACKJACK!')
+      successSoundEffect.play()
+      renderResults('&#10023; BLACKJACK! &#10023;')
     } else if (playersCardsSum !== 21 && dealersCardsSum === 21) {
       dealersTurn()
+      failureSoundEffect.play()
       renderResults('DEALER WINS!')
     }
 
@@ -327,8 +341,10 @@ function renderGame() {
       (playersCardsSum > dealersCardsSum || dealersCardsSum >= 22)
     ) {
       availableAmount += betAmount * 2
+      successSoundEffect.play()
       renderResults('PLAYER WINS!')
     } else if (playersCardsSum > 21 || dealersCardsSum > playersCardsSum) {
+      failureSoundEffect.play()
       renderResults('DEALER WINS!')
     } else {
       availableAmount += betAmount
@@ -407,7 +423,3 @@ function buildOriginalDeck() {
 }
 
 // Reference (#): https://git.generalassemb.ly/SEI-CC/SEI-6-5/blob/main/Unit_1/08-libraries-frameworks/8.2-css-card-library.md
-
-//    THINGS TO DO:
-// > FIX WHAT DEALER STANDS ON
-// > WORK ON POSSIBLE BONUSES (AUDIO INCLUDED)
