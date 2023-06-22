@@ -2,7 +2,7 @@
 
 ## One of the most popular casino games out there!
 
-This project is your classic blackjack game but one deck at a time. I was inspired by my most favorite and 
+This project is your classic blackjack game but one deck at a time. I was inspired by my most favorite and
 the nearest gambling town that I have from home (West Wendover, NV) to create this single-deck version.
 Also, I'm a blackjack fanatic! so I couldn't skip this opportunity to make one myself for my very first project of this type (a web-based game).
 
@@ -16,12 +16,12 @@ Basically, all you are trying to do is beat the dealer.
 —By the dealer drawing a hand value that goes over 21. </br>
 —By drawing a hand value of 21 on your first two cards, when the dealer does not. <br>
 
-### The ways to lose to the dealer are: 
+### The ways to lose to the dealer are:
 
 —Your hand value exceeds 21 (or "busting"). </br>
 —The dealers hand has a greater value than yours at the end of the round. </br>
 
-### More on how to play this awesome game: 
+### More on how to play this awesome game:
 
 https://www.blackjackapprenticeship.com/how-to-play-blackjack/
 
@@ -42,7 +42,7 @@ https://www.blackjackapprenticeship.com/how-to-play-blackjack/
 
 ## My experience building this project
 
-Even though a lot of the making of this game was fun to me —especially because of how much I enjoy 
+Even though a lot of the making of this game was fun to me —especially because of how much I enjoy
 casino-related stuff, blackjack, math and coding—, I encountered a few problems, challenges and frustrations.
 
 ### Some of the biggest challenges were:
@@ -53,3 +53,13 @@ casino-related stuff, blackjack, math and coding—, I encountered a few problem
 is playing regardless of the amount of rounds played.
 
 I'm working on making this entire game as accurate as possible so the user can have the best experience and most fun possible!
+
+## Screenshots of the game:
+
+![Alt text](about/img1.png)
+
+![Alt text](about/img2.png)
+
+![Alt text](about/img3.png)
+
+![Alt text](about/img4.png)
