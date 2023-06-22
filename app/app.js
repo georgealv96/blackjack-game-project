@@ -15,10 +15,10 @@ const ranks = [
   'K',
   'A'
 ]
-const chipsSoundEffect = new Audio('./chips.wav')
-const singleChipSoundEffect = new Audio('./single-chip.wav')
-const successSoundEffect = new Audio('./success.wav')
-const failureSoundEffect = new Audio('./failure.wav')
+const chipsSoundEffect = new Audio('./../audio/chips.wav')
+const singleChipSoundEffect = new Audio('./../audio/single-chip.wav')
+const successSoundEffect = new Audio('./../success.wav')
+const failureSoundEffect = new Audio('./../failure.wav')
 
 /*----- app's state (variables) -----*/
 
