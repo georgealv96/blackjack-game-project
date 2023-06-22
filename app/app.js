@@ -161,15 +161,14 @@ function renderGame() {
     doubleDownBtn.innerText = 'DOUBLE'
     document.getElementById('second-page-buttons').append(doubleDownBtn)
     // When the player clicks on the 'double' button...
-    doubleDownBtn.addEventListener('click', function () {
+    doubleDownBtn.onclick = function () {
       availableAmount -= betAmount
       betAmount *= 2
       updateBetInfo()
       getAnExtraCard()
       dealersTurn()
       compareResults()
-      doubleDownBtn.remove()
-    })
+    }
   }
 
   // When the table is being displayed...
