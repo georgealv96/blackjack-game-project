@@ -5,7 +5,7 @@
 ## One of the most popular casino games out there!
 
 This project is your classic blackjack game but one deck at a time. I was inspired by my most favorite and
-the nearest gambling town that I have from home (West Wendover, NV) to create this single-deck version.
+the nearest gambling town that I have from home to create this single-deck version.
 Also, I'm a blackjack fanatic! so I couldn't skip this opportunity to make one myself for my very first project of this type (a web-based game).
 
 ## Rules to the game:

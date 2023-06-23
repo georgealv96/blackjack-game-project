@@ -15,10 +15,18 @@ const ranks = [
   'K',
   'A'
 ]
-const chipsSoundEffect = new Audio('./../audio/chips.wav')
-const singleChipSoundEffect = new Audio('./../audio/single-chip.wav')
-const successSoundEffect = new Audio('./../success.wav')
-const failureSoundEffect = new Audio('./../failure.wav')
+const chipsSoundEffect = new Audio(
+  'https://georgealv96.github.io/blackjack-game-project/audio/chips.wav'
+)
+const singleChipSoundEffect = new Audio(
+  'https://georgealv96.github.io/blackjack-game-project/audio/single-chip.wav'
+)
+const successSoundEffect = new Audio(
+  'https://georgealv96.github.io/blackjack-game-project/audio/success.wav'
+)
+const failureSoundEffect = new Audio(
+  'https://georgealv96.github.io/blackjack-game-project/audio/failure.wav'
+)
 
 /*----- app's state (variables) -----*/
 
@@ -62,7 +70,6 @@ function handleChips(evt) {
     chipSelected !== 'chip-clear' &&
     evt.target.getAttribute('class') !== 'chips'
   ) {
-    singleChipSoundEffect.load()
     singleChipSoundEffect.play()
   }
   // Substract from the available amount and add to the
