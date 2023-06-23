@@ -253,6 +253,7 @@ function renderGame() {
 
   // Search for Aces in a playing hand and convert them to ones if necessary
   function searchForAce(cardHand, cardSum) {
+    // Iterate only if the sum of the cards in the hand is greater than 21
     if (cardSum > 21) {
       for (card of cardHand) {
         if (card.value === 11) {
